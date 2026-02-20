@@ -1,4 +1,4 @@
-##🚀✨ Smart Glow Animated Login System
+🚀✨ Smart Glow Animated Login System
 
 A next-generation interactive login & registration experience built with pure HTML, CSS & JavaScript.
 
@@ -80,10 +80,15 @@ No frameworks. Pure frontend engineering.
 🧠 What This Project Demonstrates
 
 ✔ Advanced UI/UX design thinking
+
 ✔ Clean component-based structure
+
 ✔ Dynamic theme management
+
 ✔ Client-side authentication logic
+
 ✔ LocalStorage data persistence
+
 ✔ Responsive web design
 
 📂 How To Use
@@ -112,7 +117,7 @@ Perfect for showcasing frontend development skills.
 
 👨‍💻 Author
 
-Built with creativity and precision by Abi
+Built with creativity and precision by Abiram
 Frontend Developer | UI Designer | JavaScript Enthusiast
 
 ⭐ If You Like This Project
@@ -125,3 +130,4 @@ Improve it
 
 Build on top of it
 # login-2.O
+output link
