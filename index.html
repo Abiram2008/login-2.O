@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glow Login + Signup</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+--theme:#ff4fd8;
+--bg:#121921;
+--card:#18202b;
+--text:#fff;
+}
+
+body{
+margin:0;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:var(--bg);
+font-family:system-ui;
+color:var(--text);
+transition:.4s;
+}
+
+body.light{
+--bg:#f2f5fb;
+--card:#fff;
+--text:#111;
+}
+
+.container{
+display:flex;
+gap:4vmin;
+flex-wrap:wrap;
+align-items:center;
+}
+
+.lamp{
+width:110px;
+height:110px;
+border-radius:50%;
+background:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:42px;
+cursor:pointer;
+color:white;
+transition:.3s;
+}
+
+.lamp.on{
+background:var(--theme);
+box-shadow:0 0 70px var(--theme);
+}
+
+.card{
+background:var(--card);
+padding:2.5rem;
+border-radius:20px;
+min-width:280px;
+max-width:340px;
+width:100%;
+opacity:0;
+transform:scale(.85);
+pointer-events:none;
+transition:.4s;
+}
+
+.card.show{
+opacity:1;
+transform:scale(1);
+pointer-events:auto;
+box-shadow:0 0 25px var(--theme);
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-top:12px;
+background:#2a3443;
+color:white;
+}
+
+body.light input{background:#eee;color:#000}
+
+button{
+width:100%;
+padding:12px;
+margin-top:16px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,var(--theme),#7b00ff);
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.link{
+text-align:center;
+margin-top:12px;
+cursor:pointer;
+color:var(--theme);
+font-size:14px;
+}
+
+.success{
+display:none;
+text-align:center;
+animation:pop .6s ease forwards;
+}
+
+.success h2{color:var(--theme)}
+
+@keyframes pop{
+from{transform:scale(.6);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.top-controls{
+position:fixed;
+top:15px;
+right:15px;
+display:flex;
+gap:10px;
+}
+
+.top-controls input{
+width:40px;
+height:40px;
+border:none;
+padding:0;
+}
+
+.toggle{
+padding:8px 12px;
+border-radius:8px;
+background:var(--theme);
+color:white;
+cursor:pointer;
+}
+
+@media(max-width:600px){
+.container{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-controls">
+<input type="color" id="colorPick" value="#ff4fd8">
+<div class="toggle" id="mode">🌙</div>
+</div>
+
+<div class="container">
+
+<div class="lamp" id="lamp">⏻</div>
+
+<div class="card" id="card">
+
+<h2 id="title">Login</h2>
+
+<form id="form">
+
+<input id="user" placeholder="Username" required>
+<input id="pass" type="password" placeholder="Password" required>
+
+<button type="submit">Continue</button>
+
+</form>
+
+<div class="link" id="switch">Create new account</div>
+
+<div class="success" id="success">
+<h2>🎉 Success</h2>
+<p>Welcome!</p>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const lamp=document.getElementById("lamp");
+const card=document.getElementById("card");
+const form=document.getElementById("form");
+const success=document.getElementById("success");
+const user=document.getElementById("user");
+const pass=document.getElementById("pass");
+const title=document.getElementById("title");
+const switchBtn=document.getElementById("switch");
+
+const colorPick=document.getElementById("colorPick");
+const mode=document.getElementById("mode");
+
+let isSignup=false;
+
+/* Load users */
+let users = JSON.parse(localStorage.getItem("users")) || {
+  admin:"1234"
+};
+
+/* Lamp toggle */
+lamp.onclick=()=>{
+lamp.classList.toggle("on");
+card.classList.toggle("show");
+}
+
+/* Switch login/signup */
+switchBtn.onclick=()=>{
+isSignup=!isSignup;
+title.textContent=isSignup?"Register":"Login";
+switchBtn.textContent=isSignup?"Already have account? Login":"Create new account";
+}
+
+/* Form submit */
+form.onsubmit=e=>{
+e.preventDefault();
+
+if(isSignup){
+  if(users[user.value]){
+    alert("User already exists");
+    return;
+  }
+  users[user.value]=pass.value;
+  localStorage.setItem("users",JSON.stringify(users));
+  alert("Account created! Now login.");
+  isSignup=false;
+  title.textContent="Login";
+  switchBtn.textContent="Create new account";
+}else{
+  if(users[user.value]===pass.value){
+    form.style.display="none";
+    success.style.display="block";
+    confetti({particleCount:180,spread:80,origin:{y:.6}});
+  }else{
+    alert("Wrong login details");
+  }
+}
+}
+
+/* Theme picker */
+colorPick.oninput=e=>{
+document.documentElement.style.setProperty("--theme",e.target.value);
+}
+
+/* Dark/light */
+mode.onclick=()=>{
+document.body.classList.toggle("light");
+mode.textContent=document.body.classList.contains("light")?"☀":"🌙";
+}
+</script>
+
+</body>
+</html>
